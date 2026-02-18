@@ -203,7 +203,6 @@
     </div>
 
     <script>
-        // SCRIPT URL BARU
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwTRkyxhOiGqEL2hMzd4ncg9pgtcx3zqQalLKuRF2Cu_fzUGz3Duf7aV4qLh9eoYQvN/exec';
         
         const loader = document.getElementById('global-loader');
@@ -214,24 +213,19 @@
             loader.style.display = show ? 'flex' : 'none';
         }
 
-        // FUNGSI VERIFIKASI ID MEMBER (LOGIC BARU)
         async function handleLogin() {
             const idInput = document.getElementById('memberID').value.trim();
             const err = document.getElementById('error-msg');
-            
             if (!idInput) return;
 
             toggleLoader(true, "VERIFYING MEMBER ID...");
             
             try {
-                // Menggunakan endpoint verify yang sudah kita buat di Apps Script
                 const response = await fetch(`${scriptURL}?action=verify&id=${encodeURIComponent(idInput)}`);
                 const result = await response.json();
-
                 toggleLoader(false);
 
                 if (result.success) {
-                    // result.data.owner mengambil kolom B di Sheets "Members"
                     document.getElementById('personal-greet').innerText = `Hai ${result.data.owner}, proceed with asset registration.`;
                     document.getElementById('personal-greet').style.display = 'block';
                     transition('state-login', 'state-form');
@@ -241,7 +235,6 @@
                 }
             } catch (e) {
                 toggleLoader(false);
-                console.error(e);
                 alert("Connection Error. Please check your internet.");
             }
         }
@@ -273,30 +266,31 @@
             }, 600);
         }
 
-        // FUNGSI SUBMIT (LOGIC BARU)
+        // --- BAGIAN YANG DIPERBAIKI ---
         document.getElementById('productForm').onsubmit = async (e) => {
             e.preventDefault();
             toggleLoader(true, "DEPLOYING ASSET...");
 
-            const pData = {
-                action: 'addProduct', // Pastikan action ini ada di doPost Apps Script
-                name: document.getElementById('pName').value,
-                serial: document.getElementById('pSerial').value,
-                img: document.getElementById('pImg').value,
-                member: document.getElementById('memberID').value
-            };
+            // Kirim menggunakan format Form URL Encoded agar lebih stabil dengan no-cors
+            const formData = new URLSearchParams();
+            formData.append('action', 'submitGallery'); // HARUS SAMA DENGAN APPS SCRIPT
+            formData.append('brand', document.getElementById('pName').value);
+            formData.append('product', document.getElementById('pSerial').value);
+            formData.append('image', document.getElementById('pImg').value);
 
             try {
-                // Menggunakan mode no-cors untuk bypass masalah redirect Apps Script
                 await fetch(scriptURL, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify(pData)
+                    mode: 'no-cors', 
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
                 });
 
-                // Karena no-cors, kita langsung anggap sukses setelah fetch selesai
-                toggleLoader(false);
-                transition('state-form', 'state-success');
+                // Beri sedikit jeda waktu sebelum transisi sukses
+                setTimeout(() => {
+                    toggleLoader(false);
+                    transition('state-form', 'state-success');
+                }, 1500);
                 
             } catch (err) {
                 toggleLoader(false);
