@@ -19,6 +19,17 @@
             padding: 0 25px; background: rgba(15,15,15,0.8); backdrop-filter: blur(20px); border: 1px solid var(--bord); border-radius: 100px; height: 75px; 
         }
         .nav-logo-img { height: 55px; width: auto; object-fit: contain; }
+
+        /* --- DESKTOP NAVIGATION (Default Hidden) --- */
+        .desktop-nav { display: none; gap: 10px; }
+        .desktop-nav a { 
+            color: var(--dim); text-decoration: none; font-size: 13px; font-weight: 600; 
+            padding: 10px 18px; border-radius: 100px; border: 1px solid transparent;
+        }
+        .desktop-nav a:hover { color: var(--accent); border-color: var(--bord); background: rgba(255,255,255,0.05); }
+        .desktop-nav a.active { color: white; border-color: var(--accent); }
+
+        /* --- MOBILE HAMBURGER --- */
         .hamburger-wrapper { position: relative; display: flex; align-items: center; }
         .hamburger { cursor: pointer; display: flex; flex-direction: column; gap: 5px; background: #1a1a1a; padding: 12px; border-radius: 50%; border: 1px solid #333; width: 45px; height: 45px; justify-content: center; align-items: center; }
         .hamburger span { width: 18px; height: 2px; background: white; }
@@ -26,6 +37,18 @@
         .dropdown-menu.active { display: flex; }
         .dropdown-menu a { color: var(--dim); text-decoration: none; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 12px; }
         .dropdown-menu a:hover { background: #1a1a1a; color: white; }
+
+        /* --- RESPONSIVE LOGIC --- */
+        @media (min-width: 800px) {
+            .hamburger-wrapper { display: none; } /* Sembunyiin hamburger di desktop */
+            .desktop-nav { display: flex; }      /* Tampilin barisan menu di desktop */
+        }
+
+        @media (max-width: 768px) { 
+            .nav-container { height: 70px; } 
+        }
+
+        /* Sisa CSS lu tetap sama... */
         .wrapper { width: 100%; max-width: 500px; margin: 0 auto; padding: 150px 20px 80px; }
         .card { background: var(--surf); border: 1px solid var(--bord); border-radius: 24px; padding: 30px 20px; margin-bottom: 20px; }
         h2 { font-weight: 800; font-size: 22px; text-align: center; margin:0; letter-spacing: 1px; }
@@ -47,15 +70,21 @@
         .value { font-size: 14px; font-weight: 500; margin-bottom: 18px; display: block; color: #eee; }
         .status { color: var(--accent); font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 8px; margin-top: 10px; text-transform: uppercase; }
         .error-msg { color: #ff4444; font-size: 12px; margin-bottom: 15px; display: none; text-align: center; font-family: 'JetBrains Mono'; }
-        @media (max-width: 768px) { 
-            .nav-container { height: 70px; } 
-        }
     </style>
 </head>
 <body>
     <nav>
         <div class="nav-container">
             <a href="index.html"><img src="https://files.catbox.moe/iru1fz.png" class="nav-logo-img"></a>
+            
+            <div class="desktop-nav">
+                <a href="index.html">Home</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="rank.html">Rank</a>
+                <a href="news.html">News</a>
+                <a href="verify.html" class="active">Verify</a>
+            </div>
+
             <div class="hamburger-wrapper">
                 <div class="hamburger" onclick="toggleMenu()"><span></span><span></span></div>
                 <div class="dropdown-menu" id="dropdownMenu">
@@ -126,12 +155,9 @@
                 const response = await fetch(`${scriptURL}?id=${id}`);
                 const result = await response.json();
 
-                // FIX: Membaca result.success dan result.data sesuai Apps Script lo
                 if (result.success && result.data) {
                     const m = result.data;
-
                     document.getElementById('res-brand').innerText = m.brand || "---";
-                    // FIX: Apps Script lo pake key 'logo'
                     document.getElementById('res-img').src = m.logo || "https://files.catbox.moe/cmhaot.jpg";
                     document.getElementById('res-id').innerText = "ID: " + m.id;
 
@@ -139,28 +165,21 @@
                     infoContainer.innerHTML = `
                         <span class="label">Owner</span>
                         <span class="value">${m.owner || '-'}</span>
-                        
                         <span class="label">WhatsApp Number</span>
                         <span class="value">${m.wa || '-'}</span>
-                        
                         <span class="label">Brand Focus</span>
                         <span class="value">${m.focus || '-'}</span>
-                        
                         <span class="label">Join Date</span>
                         <span class="value">${m.join_date || m.date || '-'}</span>
-                        
                         <span class="label">Brand Slogan</span>
                         <span class="value" style="color:var(--accent)">"${m.slogan || '-'}"</span>
-                        
                         <span class="label">Description</span>
                         <span class="value">${m.desc || '-'}</span>
-                        
                         <div class="status">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                             VERIFIED EINHEIT MEMBER
                         </div>
                     `;
-
                     document.getElementById('input-card').style.display = 'none';
                     document.getElementById('result-section').classList.add('active-result');
                 } else {
