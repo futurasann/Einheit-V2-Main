@@ -61,7 +61,7 @@
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="index.html">Home</a>
                     <a href="gallery.html">Gallery</a>
-                    <a href="rank.html">Rank</a> <!-- ditambahin di sini bro, urutan sesuai request lu -->
+                    <a href="rank.html">Rank</a>
                     <a href="news.html">News</a>
                     <a href="verify.html">Check ID Card</a>
                 </div>
@@ -71,21 +71,21 @@
 
     <div class="wrapper">
         <div id="input-card" class="card animate">
-            <h2>DATABASE ACCESS</h2>
-            <div class="sub">Member Verification System</div>
-            <input type="text" class="input-box" placeholder="EHT-XXX" id="memberID">
-            <div id="error-msg" class="error-msg">ACCESS DENIED: ID NOT FOUND</div>
-            <button class="btn-scan" id="btnAction" onclick="fetchMemberData()">Initiate Scan</button>
+            <h2>CHECK YOUR ID CARD</h2>
+            <div class="sub">Check your ID Card in here</div>
+            <input type="text" class="input-box" placeholder="EHT-XXXXX" id="memberID">
+            <div id="error-msg" class="error-msg">ID NOT FOUND :(</div>
+            <button class="btn-scan" id="btnAction" onclick="fetchMemberData()">Check id card</button>
             <div id="loading">
                 <div class="spinner"></div>
-                <div style="color:var(--accent); font-size:10px; font-weight:700; letter-spacing:2px;">SCANNING ARCHIVE...</div>
+                <div style="color:var(--accent); font-size:10px; font-weight:700; letter-spacing:2px;">SCANNING ID CARD...</div>
             </div>
         </div>
 
         <div id="result-section">
             <div class="card">
                 <div class="profile-header">
-                    <img src="" id="res-img" class="brand-img" onerror="this.src='https://files.catbox.moe/9q363i.png'">
+                    <img src="" id="res-img" class="brand-img" onerror="this.src='https://files.catbox.moe/cmhaot.jpg'">
                     <div>
                         <p class="brand-name" id="res-brand">---</p>
                         <span id="res-id" style="font-size:12px; color:var(--dim); font-family: 'JetBrains Mono';"></span>
@@ -126,34 +126,38 @@
                 const response = await fetch(`${scriptURL}?id=${id}`);
                 const result = await response.json();
 
-                if (result && result.brand) {
-                    document.getElementById('res-brand').innerText = result.brand;
-                    document.getElementById('res-img').src = result.img || "https://files.catbox.moe/9q363i.png";
-                    document.getElementById('res-id').innerText = "ID: " + id;
+                // FIX: Membaca result.success dan result.data sesuai Apps Script lo
+                if (result.success && result.data) {
+                    const m = result.data;
+
+                    document.getElementById('res-brand').innerText = m.brand || "---";
+                    // FIX: Apps Script lo pake key 'logo'
+                    document.getElementById('res-img').src = m.logo || "https://files.catbox.moe/cmhaot.jpg";
+                    document.getElementById('res-id').innerText = "ID: " + m.id;
 
                     const infoContainer = document.getElementById('info-content');
                     infoContainer.innerHTML = `
                         <span class="label">Owner</span>
-                        <span class="value">${result.owner || '-'}</span>
+                        <span class="value">${m.owner || '-'}</span>
                         
                         <span class="label">WhatsApp Number</span>
-                        <span class="value">${result.wa || '-'}</span>
+                        <span class="value">${m.wa || '-'}</span>
                         
                         <span class="label">Brand Focus</span>
-                        <span class="value">${result.focus || '-'}</span>
+                        <span class="value">${m.focus || '-'}</span>
                         
                         <span class="label">Join Date</span>
-                        <span class="value">${result.join_date || result.date || '-'}</span>
+                        <span class="value">${m.join_date || m.date || '-'}</span>
                         
                         <span class="label">Brand Slogan</span>
-                        <span class="value">${result.slogan || '-'}</span>
+                        <span class="value" style="color:var(--accent)">"${m.slogan || '-'}"</span>
                         
                         <span class="label">Description</span>
-                        <span class="value">${result.desc || '-'}</span>
+                        <span class="value">${m.desc || '-'}</span>
                         
                         <div class="status">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            VERIFIED SYSTEM ARCHIVE
+                            VERIFIED EINHEIT MEMBER
                         </div>
                     `;
 
