@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EINHEIT | Brand Rank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #000; --surf: #0d0d0d; --bord: #222; --dim: #999; --accent: #00ff88; --max-w-desktop: 1100px; }
+        * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; width: 100%; }
+        .skeleton { background: linear-gradient(90deg, #0d0d0d 25%, #1a1a1a 50%, #0d0d0d 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
+        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        nav { display: flex; justify-content: center; align-items: center; position: fixed; width: 100%; top: 20px; z-index: 9999; padding: 0 15px; }
+        .nav-container { width: 100%; max-width: var(--max-w-desktop); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(20px); border: 1px solid var(--bord); border-radius: 100px; height: 75px; }
+        .nav-logo-img { height: 55px; width: auto; }
+        .desktop-menu { display: none; gap: 30px; }
+        .desktop-menu a { color: var(--dim); text-decoration: none; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+        .desktop-menu a:hover, .desktop-menu a.active { color: white; }
+        .hamburger-wrapper { position: relative; }
+        .hamburger { cursor: pointer; display: flex; flex-direction: column; gap: 6px; background: #1a1a1a; padding: 12px; border-radius: 50%; border: 1px solid #333; width: 45px; height: 45px; justify-content: center; align-items: center; }
+        .hamburger span { width: 18px; height: 2px; background: white; }
+        .dropdown-menu { position: absolute; top: 70px; right: 0; width: 220px; background: #0f0f0f; border: 1px solid var(--bord); border-radius: 20px; padding: 15px; display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 100; }
+        .dropdown-menu.active { display: flex; }
+        .dropdown-menu a { color: var(--dim); text-decoration: none; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 12px; }
+        .dropdown-menu a:hover { background: #1a1a1a; color: white; }
+        .wrapper { width: 100%; max-width: 600px; margin: 0 auto; padding: 150px 20px 40px; min-height: 100vh; display: flex; flex-direction: column; }
+        h2 { font-size: 32px; font-weight: 800; letter-spacing: -1.5px; margin-bottom: 10px; text-align: center; }
+        .sub-head { color: var(--dim); font-size: 11px; text-align: center; margin-bottom: 50px; text-transform: uppercase; letter-spacing: 3px; }
+        .rank-container { display: flex; flex-direction: column; gap: 12px; }
+        .rank-card { display: flex; align-items: center; background: var(--surf); padding: 20px; border: 1px solid var(--bord); border-radius: 20px; position: relative; overflow: hidden; margin-bottom: 12px; }
+        .rank-card.top-1 { border-color: var(--accent); background: linear-gradient(145deg, #0d0d0d, #051a10); }
+        .rank-num { width: 40px; font-family: 'JetBrains Mono'; font-weight: 800; font-size: 16px; color: var(--dim); }
+        .top-1 .rank-num { color: var(--accent); }
+        .brand-logo { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; margin: 0 15px; border: 1px solid var(--bord); background: #111; }
+        .brand-detail { flex-grow: 1; }
+        .brand-name { font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; }
+        .brand-owner { font-size: 10px; color: var(--dim); margin-top: 2px; }
+        .manual-scores { display: flex; gap: 8px; margin-top: 8px; }
+        .score-tag { font-size: 8px; background: #1a1a1a; padding: 3px 8px; border-radius: 4px; color: var(--accent); border: 1px solid #333; font-weight: 600; }
+        .power-box { text-align: right; }
+        .power-val { font-family: 'JetBrains Mono'; color: var(--accent); font-size: 16px; font-weight: 800; }
+        .power-label { font-size: 7px; color: #444; letter-spacing: 1px; margin-top: 2px; text-transform: uppercase; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        @media (min-width: 992px) { .desktop-menu { display: flex; } .hamburger-wrapper { display: none; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html"><img src="https://files.catbox.moe/iru1fz.png" class="nav-logo-img"></a>
+            <div class="desktop-menu">
+                <a href="index.html">Home</a><a href="gallery.html">Gallery</a><a href="rank.html" class="active">Rank</a><a href="news.html">News</a><a href="verify.html">Check ID Card</a>
+            </div>
+            <div class="hamburger-wrapper">
+                <div class="hamburger" onclick="toggleMenu()"><span></span><span></span></div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="index.html">Home</a><a href="gallery.html">Gallery</a><a href="rank.html" class="active">Rank</a><a href="news.html">News</a><a href="verify.html">Check ID Card</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <h2 class="animate">LEADERBOARD.</h2>
+        <p class="sub-head animate">Collective influence measurement</p>
+        <div class="rank-container" id="rankContainer">
+            <div class="rank-card skeleton" style="height: 92px; border:none;"></div>
+            <div class="rank-card skeleton" style="height: 92px; border:none;"></div>
+        </div>
+        <footer style="margin-top: 80px; text-align: center; padding: 40px 0;">
+            <div style="font-family: 'JetBrains Mono'; font-size: 9px; color: #333; text-transform: uppercase; letter-spacing: 2px;">© 2026 EINHEIT COLLECTIVE</div>
+        </footer>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTRkyxhOiGqEL2hMzd4ncg9pgtcx3zqQalLKuRF2Cu_fzUGz3Duf7aV4qLh9eoYQvN/exec';
+        
+        function toggleMenu() { 
+            document.getElementById('dropdownMenu').classList.toggle('active'); 
+        }
+
+        async function loadRank() {
+            const container = document.getElementById('rankContainer');
+            try {
+                const url = `${SCRIPT_URL}?action=getRank&t=${new Date().getTime()}`;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    redirect: 'follow'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Data rank bro:', data);
+
+                if (Array.isArray(data) && data.length > 0) {
+                    renderRank(data);
+                } else {
+                    container.innerHTML = '<p style="text-align:center;color:#999;">Data rank kosong atau format salah 😿</p>';
+                }
+            } catch (err) {
+                console.error('Gagal load rank:', err);
+                container.innerHTML = '<p style="text-align:center;color:#ff5555;">Gagal ambil rank nih 🤤<br>Error: ' + err.message + '<br>Cek console ya bro!</p>';
+            }
+        }
+
+        function renderRank(data) {
+            const container = document.getElementById('rankContainer');
+            container.innerHTML = data.map((item, index) => `
+                <div class="rank-card ${index === 0 ? 'top-1' : ''} animate" style="animation-delay: ${index * 0.05}s">
+                    <div class="rank-num">#${index + 1}</div>
+                    <img src="${item.logo || 'https://via.placeholder.com/100'}" class="brand-logo" onerror="this.src='https://via.placeholder.com/100'">
+                    <div class="brand-detail">
+                        <div class="brand-name">${item.brand || 'UNKNOWN'}</div>
+                        <div class="brand-owner">BY ${item.owner || 'N/A'}</div>
+                        <div class="manual-scores">
+                            <span class="score-tag">🎨 ${item.art || '0'}</span>
+                            <span class="score-tag">⚙️ ${item.tech || '0'}</span>
+                        </div>
+                    </div>
+                    <div class="power-box">
+                        <div class="power-val">${item.power || 0}</div>
+                        <div class="power-label">POWER INDEX</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Panggil pas page load
+        document.addEventListener('DOMContentLoaded', loadRank);
+    </script>
+</body>
+</html>

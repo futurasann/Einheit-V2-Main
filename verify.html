@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EINHEIT | Database Verify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #000; --surf: #0d0d0d; --bord: #222; --dim: #999; 
+            --accent: #00ff88; --max-w-desktop: 1100px; 
+        }
+        * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; width: 100%; }
+
+        nav { display: flex; justify-content: center; align-items: center; position: fixed; width: 100%; top: 20px; z-index: 9999; padding: 0 15px; }
+        .nav-container { 
+            width: 100%; max-width: var(--max-w-desktop); display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 25px; background: rgba(15,15,15,0.8); backdrop-filter: blur(20px); border: 1px solid var(--bord); border-radius: 100px; height: 75px; 
+        }
+        .nav-logo-img { height: 55px; width: auto; object-fit: contain; }
+        .hamburger-wrapper { position: relative; display: flex; align-items: center; }
+        .hamburger { cursor: pointer; display: flex; flex-direction: column; gap: 5px; background: #1a1a1a; padding: 12px; border-radius: 50%; border: 1px solid #333; width: 45px; height: 45px; justify-content: center; align-items: center; }
+        .hamburger span { width: 18px; height: 2px; background: white; }
+        .dropdown-menu { position: absolute; top: 70px; right: 0; width: 220px; background: #0f0f0f; border: 1px solid var(--bord); border-radius: 20px; padding: 15px; display: none; flex-direction: column; gap: 5px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .dropdown-menu.active { display: flex; }
+        .dropdown-menu a { color: var(--dim); text-decoration: none; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 12px; }
+        .dropdown-menu a:hover { background: #1a1a1a; color: white; }
+        .wrapper { width: 100%; max-width: 500px; margin: 0 auto; padding: 150px 20px 80px; }
+        .card { background: var(--surf); border: 1px solid var(--bord); border-radius: 24px; padding: 30px 20px; margin-bottom: 20px; }
+        h2 { font-weight: 800; font-size: 22px; text-align: center; margin:0; letter-spacing: 1px; }
+        .sub { color: var(--dim); font-size: 10px; text-transform: uppercase; letter-spacing: 2px; text-align: center; margin-bottom: 30px; }
+        .input-box { background: #050505; border: 1px solid var(--bord); border-radius: 12px; padding: 20px; margin-bottom: 20px; font-family: 'JetBrains Mono'; font-size: 18px; color: white; width: 100%; text-align: center; outline: none; letter-spacing: 4px; }
+        .btn-scan { background: white; color: black; width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: 800; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; }
+        #loading { display: none; text-align: center; padding: 30px 0; }
+        .spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { opacity: 0; animation: fadeUp 0.8s ease forwards; }
+        #result-section { display: none; }
+        .active-result { display: block !important; animation: fadeUp 0.6s forwards; }
+        .profile-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .brand-img { width: 75px; height: 75px; border-radius: 15px; border: 1px solid var(--bord); object-fit: cover; }
+        .brand-name { font-size: 22px; font-weight: 800; margin: 0; text-transform: uppercase; }
+        .info-grid { border-top: 1px solid var(--bord); padding-top: 20px; }
+        .label { font-size: 9px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; display: block; }
+        .value { font-size: 14px; font-weight: 500; margin-bottom: 18px; display: block; color: #eee; }
+        .status { color: var(--accent); font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 8px; margin-top: 10px; text-transform: uppercase; }
+        .error-msg { color: #ff4444; font-size: 12px; margin-bottom: 15px; display: none; text-align: center; font-family: 'JetBrains Mono'; }
+        @media (max-width: 768px) { 
+            .nav-container { height: 70px; } 
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html"><img src="https://files.catbox.moe/iru1fz.png" class="nav-logo-img"></a>
+            <div class="hamburger-wrapper">
+                <div class="hamburger" onclick="toggleMenu()"><span></span><span></span></div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="index.html">Home</a>
+                    <a href="gallery.html">Gallery</a>
+                    <a href="rank.html">Rank</a> <!-- ditambahin di sini bro, urutan sesuai request lu -->
+                    <a href="news.html">News</a>
+                    <a href="verify.html">Check ID Card</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <div id="input-card" class="card animate">
+            <h2>DATABASE ACCESS</h2>
+            <div class="sub">Member Verification System</div>
+            <input type="text" class="input-box" placeholder="EHT-XXX" id="memberID">
+            <div id="error-msg" class="error-msg">ACCESS DENIED: ID NOT FOUND</div>
+            <button class="btn-scan" id="btnAction" onclick="fetchMemberData()">Initiate Scan</button>
+            <div id="loading">
+                <div class="spinner"></div>
+                <div style="color:var(--accent); font-size:10px; font-weight:700; letter-spacing:2px;">SCANNING ARCHIVE...</div>
+            </div>
+        </div>
+
+        <div id="result-section">
+            <div class="card">
+                <div class="profile-header">
+                    <img src="" id="res-img" class="brand-img" onerror="this.src='https://files.catbox.moe/9q363i.png'">
+                    <div>
+                        <p class="brand-name" id="res-brand">---</p>
+                        <span id="res-id" style="font-size:12px; color:var(--dim); font-family: 'JetBrains Mono';"></span>
+                    </div>
+                </div>
+                <div class="info-grid" id="info-content"></div>
+            </div>
+            <button class="btn-scan" style="background:transparent; border:1px solid var(--bord); color:var(--dim); font-size:11px;" onclick="location.reload()">Terminate Session</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() { document.getElementById('dropdownMenu').classList.toggle('active'); }
+        
+        window.onclick = function(e) { 
+            if (!e.target.closest('.hamburger-wrapper')) {
+                document.getElementById('dropdownMenu').classList.remove('active');
+            }
+        }
+
+        async function fetchMemberData() {
+            const idInput = document.getElementById('memberID').value.trim();
+            const id = idInput.toUpperCase();
+            if(!id) return;
+
+            const btn = document.getElementById('btnAction');
+            const loading = document.getElementById('loading');
+            const inputField = document.getElementById('memberID');
+            const errorMsg = document.getElementById('error-msg');
+
+            btn.style.display = 'none';
+            inputField.style.display = 'none';
+            errorMsg.style.display = 'none';
+            loading.style.display = 'block';
+
+            try {
+                const scriptURL = "https://script.google.com/macros/s/AKfycbwTRkyxhOiGqEL2hMzd4ncg9pgtcx3zqQalLKuRF2Cu_fzUGz3Duf7aV4qLh9eoYQvN/exec";
+                const response = await fetch(`${scriptURL}?id=${id}`);
+                const result = await response.json();
+
+                if (result && result.brand) {
+                    document.getElementById('res-brand').innerText = result.brand;
+                    document.getElementById('res-img').src = result.img || "https://files.catbox.moe/9q363i.png";
+                    document.getElementById('res-id').innerText = "ID: " + id;
+
+                    const infoContainer = document.getElementById('info-content');
+                    infoContainer.innerHTML = `
+                        <span class="label">Owner</span>
+                        <span class="value">${result.owner || '-'}</span>
+                        
+                        <span class="label">WhatsApp Number</span>
+                        <span class="value">${result.wa || '-'}</span>
+                        
+                        <span class="label">Brand Focus</span>
+                        <span class="value">${result.focus || '-'}</span>
+                        
+                        <span class="label">Join Date</span>
+                        <span class="value">${result.join_date || result.date || '-'}</span>
+                        
+                        <span class="label">Brand Slogan</span>
+                        <span class="value">${result.slogan || '-'}</span>
+                        
+                        <span class="label">Description</span>
+                        <span class="value">${result.desc || '-'}</span>
+                        
+                        <div class="status">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            VERIFIED SYSTEM ARCHIVE
+                        </div>
+                    `;
+
+                    document.getElementById('input-card').style.display = 'none';
+                    document.getElementById('result-section').classList.add('active-result');
+                } else {
+                    throw new Error("Not Found");
+                }
+            } catch (e) {
+                loading.style.display = 'none';
+                btn.style.display = 'block';
+                inputField.style.display = 'block';
+                errorMsg.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

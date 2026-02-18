@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EINHEIT | News</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #000; --surf: #0d0d0d; --bord: #222; --dim: #999; 
+            --max-w-desktop: 1100px; 
+            --max-w-content: 850px;
+            --accent: #00ff88;
+        }
+        
+        * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { 
+            background: var(--bg); color: white; font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; width: 100%; 
+        }
+
+        /* NAVBAR */
+        nav { 
+            display: flex; justify-content: center; align-items: center; 
+            position: fixed; width: 100%; top: 20px; left: 0; z-index: 9999; 
+            padding: 0 15px;
+        }
+        
+        .nav-container { 
+            width: 100%; max-width: var(--max-w-desktop); 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 25px; 
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--bord); border-radius: 100px;
+            height: 75px; min-height: 75px;
+        }
+
+        .nav-logo-img { height: 55px; width: auto; flex-shrink: 0; }
+
+        .desktop-menu { display: none; gap: 30px; }
+        .desktop-menu a { 
+            color: var(--dim); text-decoration: none; font-size: 11px; 
+            font-weight: 600; text-transform: uppercase; letter-spacing: 2px; 
+        }
+        .desktop-menu a:hover { color: white; }
+
+        .hamburger-wrapper { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+        .hamburger { 
+            cursor: pointer; display: flex; flex-direction: column; gap: 5px; 
+            background: #1a1a1a; padding: 12px; border-radius: 50%; border: 1px solid #333;
+            width: 45px; height: 45px; justify-content: center; align-items: center;
+        }
+        .hamburger span { width: 18px; height: 2px; background: white; flex-shrink: 0; }
+
+        .dropdown-menu {
+            position: absolute; top: 70px; right: 0; width: 220px;
+            background: #0f0f0f; border: 1px solid var(--bord);
+            border-radius: 20px; padding: 15px; display: none;
+            flex-direction: column; gap: 5px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+        .dropdown-menu.active { display: flex; }
+        .dropdown-menu a { color: var(--dim); text-decoration: none; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 12px; }
+        .dropdown-menu a:hover { background: #1a1a1a; color: white; }
+
+        /* WRAPPER */
+        .wrapper { 
+            width: 100%; 
+            max-width: var(--max-w-content); 
+            margin: 0 auto;
+            padding: 150px 20px 40px; 
+            text-align: center;
+        }
+
+        h2 { font-size: clamp(32px, 5vw, 48px); font-weight: 800; letter-spacing: -2px; margin-bottom: 40px; text-align: left; }
+        
+        /* NEWS CARDS */
+        #newsContainer { text-align: left; }
+        .news-card { 
+            background: var(--surf); 
+            border: 1px solid var(--bord); 
+            border-radius: 16px; 
+            margin-bottom: 20px; 
+            display: flex; 
+            overflow: hidden; 
+            align-items: stretch; 
+        }
+        .news-img { width: 110px; min-width: 110px; object-fit: cover; border-right: 1px solid var(--bord); background: #111; }
+        .news-content { padding: 15px 20px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .news-meta { font-size: 9px; color: var(--dim); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
+        .news-card h3 { margin: 0; font-size: 16px; font-weight: 800; line-height: 1.2; color: white; }
+        .news-card p { font-size: 12px; color: #888; margin-top: 8px; line-height: 1.4; }
+
+        /* SKELETON */
+        .skeleton {
+            background: linear-gradient(90deg, #0d0d0d 25%, #1a1a1a 50%, #0d0d0d 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite linear;
+        }
+        @keyframes shimmer { to { background-position: -200% 0; } }
+        .sk-img { width: 110px; height: 110px; }
+        .sk-text { height: 14px; border-radius: 4px; margin-bottom: 8px; }
+        .sk-title { width: 70%; height: 18px; }
+        .sk-meta { width: 30%; height: 10px; }
+
+        footer { margin-top: 80px; padding: 40px 0; border-top: 1px solid var(--bord); text-align: center; }
+        .copyright { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; }
+
+        @media (max-width: 768px) {
+            .nav-container { height: 70px; min-height: 70px; padding: 0 20px; }
+            .news-card { flex-direction: column; }
+            .news-img { width: 100%; height: 180px; border-right: none; border-bottom: 1px solid var(--bord); }
+        }
+
+        @media (min-width: 992px) {
+            .desktop-menu { display: flex; }
+            .hamburger-wrapper { display: none; }
+        }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { opacity: 0; animation: fadeUp 0.8s ease forwards; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html"><img src="https://files.catbox.moe/iru1fz.png" class="nav-logo-img"></a>
+            <div class="desktop-menu">
+                <a href="index.html">Home</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="rank.html">Rank</a>
+                <a href="news.html" style="color: white;">News</a>
+                <a href="verify.html">Check ID Card</a>
+            </div>
+            <div class="hamburger-wrapper">
+                <div class="hamburger" onclick="toggleMenu()">
+                    <span></span><span></span>
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="index.html">Home</a>
+                    <a href="gallery.html">Gallery</a>
+                    <a href="rank.html">Rank</a>
+                    <a href="news.html">News</a>
+                    <a href="verify.html">Check ID Card</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <h2 class="animate">Einheit News.</h2>
+        <div id="newsContainer">
+            <div class="news-card sk-item">
+                <div class="sk-img skeleton"></div>
+                <div class="news-content">
+                    <div class="sk-meta skeleton"></div>
+                    <div class="sk-title skeleton"></div>
+                    <div class="sk-text skeleton"></div>
+                </div>
+            </div>
+        </div>
+        <footer class="animate">
+            <div class="copyright">© 2026 EINHEIT COLLECTIVE. ALL RIGHTS RESERVED.</div>
+        </footer>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwTRkyxhOiGqEL2hMzd4ncg9pgtcx3zqQalLKuRF2Cu_fzUGz3Duf7aV4qLh9eoYQvN/exec';
+        let isFirstLoad = true;
+
+        function toggleMenu() { document.getElementById('dropdownMenu').classList.toggle('active'); }
+        window.onclick = function(event) { if (!event.target.closest('.hamburger-wrapper')) { const menu = document.getElementById('dropdownMenu'); if (menu && menu.classList.contains('active')) menu.classList.remove('active'); } }
+
+        function renderNews(data, cachedKeys = []) {
+            const container = document.getElementById('newsContainer');
+            
+            // Hapus skeleton jika ini render pertama
+            if (isFirstLoad || container.querySelector('.sk-item')) {
+                container.innerHTML = '';
+            }
+
+            container.innerHTML = data.map((item, i) => {
+                const uniqueKey = item.title + item.date; 
+                const shouldAnimate = isFirstLoad || !cachedKeys.includes(uniqueKey);
+                return `
+                    <div class="news-card ${shouldAnimate ? 'animate' : ''}" style="${shouldAnimate ? `animation-delay: ${i*0.05}s` : ''}">
+                        <img src="${item.img}" class="news-img" loading="lazy" onerror="this.src='https://via.placeholder.com/110'">
+                        <div class="news-content">
+                            <span class="news-meta">${item.cat} • ${item.date}</span>
+                            <h3>${item.title}</h3>
+                            <p>${item.content}</p>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        async function fetchNews() {
+            const cachedRaw = localStorage.getItem('einheit_news_cache');
+            let cachedData = cachedRaw ? JSON.parse(cachedRaw) : [];
+            
+            // Tampilkan cache dulu biar cepet
+            if (cachedData.length > 0) { 
+                renderNews(cachedData, []); 
+                isFirstLoad = false; 
+            }
+
+            try {
+                // Fetch data fresh dari Apps Script
+                const response = await fetch(`${scriptURL}?action=getNews&t=${new Date().getTime()}`);
+                const freshData = await response.json();
+
+                // Update UI hanya jika data berbeda dari cache
+                if (JSON.stringify(freshData) !== cachedRaw) {
+                    const cachedKeys = cachedData.map(item => item.title + item.date);
+                    renderNews(freshData, cachedKeys);
+                    localStorage.setItem('einheit_news_cache', JSON.stringify(freshData));
+                }
+            } catch (e) { 
+                console.error("News Fetch Error:", e);
+            }
+        }
+
+        // Jalankan Fetch
+        fetchNews();
+    </script>
+</body>
+</html>

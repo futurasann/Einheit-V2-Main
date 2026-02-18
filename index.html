@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EINHEIT | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #000; --surf: #0d0d0d; --bord: #222; --dim: #888; 
+            --max-w-desktop: 1100px;
+        }
+        
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+        html, body { 
+            background: var(--bg); color: white; font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; width: 100%; 
+        }
+
+        /* NAVBAR PILL */
+        nav { 
+            display: flex; justify-content: center; align-items: center; 
+            position: fixed; width: 100%; top: 20px; left: 0; z-index: 9999; 
+            padding: 0 15px;
+        }
+        
+        .nav-container { 
+            width: 100%; max-width: var(--max-w-desktop); 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 25px; 
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--bord); border-radius: 100px;
+            height: 75px; min-height: 75px;
+        }
+
+        .nav-logo-img { height: 55px; width: auto; flex-shrink: 0; }
+
+        .desktop-menu { display: none; gap: 30px; }
+        .desktop-menu a { 
+            color: var(--dim); text-decoration: none; font-size: 11px; 
+            font-weight: 600; text-transform: uppercase; letter-spacing: 2px; 
+        }
+        .desktop-menu a:hover { color: white; }
+
+        .hamburger-wrapper { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+        .hamburger { 
+            cursor: pointer; display: flex; flex-direction: column; gap: 5px; 
+            background: #1a1a1a; padding: 12px; border-radius: 50%; border: 1px solid #333;
+            width: 45px; height: 45px; justify-content: center; align-items: center;
+        }
+        .hamburger span { width: 18px; height: 2px; background: white; flex-shrink: 0; }
+
+        .dropdown-menu {
+            position: absolute; top: 70px; right: 0; width: 220px;
+            background: #0f0f0f; border: 1px solid var(--bord);
+            border-radius: 20px; padding: 15px; display: none;
+            flex-direction: column; gap: 5px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+        .dropdown-menu.active { display: flex; }
+        .dropdown-menu a { color: var(--dim); text-decoration: none; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 12px; }
+        .dropdown-menu a:hover { background: #1a1a1a; color: white; }
+
+        /* CONTENT WRAPPER */
+        .wrapper { 
+            width: 100%; max-width: var(--max-w-desktop); 
+            margin: 0 auto; padding: 160px 20px 40px; text-align: center; 
+        }
+
+        .logo-box { font-size: 10px; letter-spacing: 10px; margin-bottom: 25px; opacity: 0.5; font-weight: 300; }
+        h1 { font-size: clamp(34px, 10vw, 85px); font-weight: 800; margin: 0; letter-spacing: -3px; line-height: 1.1; }
+        .desc { color: var(--dim); font-size: 16px; line-height: 1.8; max-width: 750px; margin: 40px auto; }
+
+        /* ADMIN CARDS */
+        .admin-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 50px; }
+        .admin-card { background: var(--surf); border: 1px solid var(--bord); padding: 25px 5px; border-radius: 16px; }
+        .admin-logo { width: 60px; height: 60px; border-radius: 50%; margin-bottom: 12px; object-fit: cover; border: 1px solid #333; }
+        .admin-card h4 { font-size: 11px; margin: 0; font-weight: 600; letter-spacing: 0.5px; line-height: 1.4; }
+        .admin-card h4 span { font-size: 9px; color: var(--dim); font-weight: 400; display: block; margin-top: 2px; }
+
+        /* CAROUSEL KOTAK */
+        .carousel { margin: 0 -20px 60px; overflow: hidden; padding: 30px 0; border-top: 1px solid var(--bord); border-bottom: 1px solid var(--bord); }
+        .track { display: flex; width: max-content; animation: scroll 45s linear infinite; }
+        .track img { 
+            height: 80px; width: 80px; 
+            margin: 0 15px; border-radius: 12px; 
+            object-fit: cover; 
+            border: 1px solid var(--bord);
+        }
+
+        /* BENEFIT GRID */
+        .benefit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 80px 0; text-align: left; }
+        .benefit-card { background: var(--surf); border: 1px solid var(--bord); padding: 40px; border-radius: 30px; }
+        .benefit-card h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        .benefit-card p { font-size: 15px; color: var(--dim); line-height: 1.6; margin: 0; }
+
+        .section-divider { border: 0; height: 1px; background: var(--bord); margin: 60px 0; width: 100%; }
+
+        /* BEFORE AFTER */
+        .ba-section { text-align: left; margin: 40px 0; }
+        .ba-row { display: flex; align-items: center; gap: 40px; margin-bottom: 40px; }
+        .ba-row.reverse { flex-direction: row-reverse; }
+        .ba-image-wrapper { flex: 1; aspect-ratio: 16/10; border-radius: 20px; overflow: hidden; border: 1px solid var(--bord); }
+        .ba-image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        .ba-content { flex: 1; }
+        .ba-content h2 { font-size: 28px; margin-bottom: 15px; font-weight: 800; letter-spacing: -1px; }
+        .ba-content p { color: var(--dim); font-size: 15px; line-height: 1.6; }
+
+        .btn-join { display: inline-block; background: white; color: black; padding: 22px 65px; text-decoration: none; font-weight: 800; border-radius: 100px; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; margin-top: 20px; }
+        .btn-join:hover { background: #eee; transform: translateY(-3px); }
+
+        footer { margin-top: 100px; padding: 40px 0; border-top: 1px solid var(--bord); }
+        .copyright { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; }
+
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .d-1 { animation-delay: 0.1s; }
+        .d-2 { animation-delay: 0.2s; }
+        .d-3 { animation-delay: 0.3s; }
+        .d-4 { animation-delay: 0.4s; }
+
+        @media (max-width: 768px) {
+            .nav-container { height: 70px; min-height: 70px; padding: 0 20px; }
+            h1 { font-size: 42px; }
+            .ba-row, .ba-row.reverse { flex-direction: column; text-align: center; gap: 20px; }
+            .admin-row { gap: 8px; }
+        }
+        @media (min-width: 992px) {
+            .desktop-menu { display: flex; }
+            .hamburger-wrapper { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html"><img src="https://files.catbox.moe/iru1fz.png" class="nav-logo-img"></a>
+            <div class="desktop-menu">
+                <a href="index.html" style="color: white;">Home</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="rank.html">Rank</a>
+                <a href="news.html">News</a>
+                <a href="verify.html">Check ID Card</a>
+            </div>
+            <div class="hamburger-wrapper">
+                <div class="hamburger" onclick="toggleMenu()"><span></span><span></span></div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="index.html">Home</a>
+                    <a href="gallery.html">Gallery</a>
+                    <a href="rank.html">Rank</a>
+                    <a href="news.html">News</a>
+                    <a href="verify.html">Check ID Card</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <div class="logo-box animate">EINHEIT 单元</div>
+        <h1 class="animate d-1">Redefining<br>Intelligence Together</h1>
+        <p class="desc animate d-2">Einheit is a growing international community focused on collaboration and shared innovation. We create a healthy environment where every member has a clear role, a voice, and the opportunity to grow.</p>
+        
+        <div class="admin-row animate d-3">
+            <div class="admin-card">
+                <img src="https://files.catbox.moe/c0w1ub.png" class="admin-logo">
+                <h4>Refenise<span>Founder</span></h4>
+            </div>
+            <div class="admin-card">
+                <img src="https://files.catbox.moe/tqrn6o.png" class="admin-logo">
+                <h4>Lunetra<span>Co-Owner</span></h4>
+            </div>
+            <div class="admin-card">
+                <img src="https://files.catbox.moe/rx1gq0.jpg" class="admin-logo">
+                <h4>Futura<span>Lead Developer</span></h4>
+            </div>
+        </div>
+
+        <div class="animate d-3" style="text-align: center; margin-bottom: 20px;">
+    <span style="font-size: 10px; letter-spacing: 4px; color: var(--dim); text-transform: uppercase; font-weight: 800;">
+        Einheit Member
+    </span>
+</div>
+
+<div class="carousel animate d-3">
+    <div class="track">
+        <img src="https://files.catbox.moe/tqrn6o.png">
+        <img src="https://files.catbox.moe/xvhevv.png">
+        <img src="https://files.catbox.moe/cj99cw.png">
+        <img src="https://files.catbox.moe/dc0h99.png">
+        <img src="https://files.catbox.moe/c0w1ub.png">
+        <img src="https://files.catbox.moe/3021su.png">
+        <img src="https://files.catbox.moe/pddu5c.png">
+        <img src="https://files.catbox.moe/9q363i.png">
+        
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+
+        <img src="https://files.catbox.moe/tqrn6o.png">
+        <img src="https://files.catbox.moe/xvhevv.png">
+        <img src="https://files.catbox.moe/cj99cw.png">
+        <img src="https://files.catbox.moe/dc0h99.png">
+        <img src="https://files.catbox.moe/c0w1ub.png">
+        <img src="https://files.catbox.moe/3021su.png">
+        <img src="https://files.catbox.moe/pddu5c.png">
+        <img src="https://files.catbox.moe/9q363i.png">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+        <img src="https://files.catbox.moe/gwywbd.jpg">
+    </div>
+</div>
+
+
+        <p class="desc animate d-2">EINHEIT is a collective of independent brands and creators united by clarity, structure, and shared ambition.
+We exist to transform individual ideas into globally relevant identities through collaboration and direction.</p>
+        <div class="benefit-grid animate d-4">
+            <div class="benefit-card">
+                <h3>Collaborative Spirit</h3>
+                <p>Building a strong culture where ideas turn into real projects.</p>
+            </div>
+            <div class="benefit-card">
+                <h3>Global Influence</h3>
+                <p>Connecting brands and creators with international standards and vision.</p>
+            </div>
+            <div class="benefit-card">
+                <h3>Structured Growth</h3>
+                <p>Scaling brands sustainably through clear structure, trust, and long-term direction.</p>
+            </div>
+        </div>
+
+        <hr class="section-divider animate d-4">
+
+        <div class="ba-section animate d-4">
+            <div class="ba-row">
+                <div class="ba-image-wrapper"><img src="https://files.catbox.moe/lsr4fc.jpg"></div>
+                <div class="ba-content">
+                    <h2>Before Joining Einheit</h2>
+                    <p>Limited design exposure with minimal reach and recognition.</p>
+                </div>
+            </div>
+            <div class="ba-row reverse">
+                <div class="ba-image-wrapper"><img src="https://files.catbox.moe/drd3qb.jpg"></div>
+                <div class="ba-content">
+                    <h2>After Joining Einheit</h2>
+                    <p>Refined designs with stronger identity, wider visibility, and growing recognition through Einheit’s network.</p>
+                </div>
+            </div>
+        </div>
+
+        <hr class="section-divider animate d-4">
+
+        <div class="animate d-4">
+            <p class="desc" style="font-size: 14px; margin-bottom: 30px;">Interested in joining Einheit?
+Apply through our registration form and take your first step into a collaborative global community focused on growth, visibility, and meaningful contribution. Ready to elevate your brand and grow beyond limits?</p>
+            <a href="join.html" class="btn-join">Join the EINHEIT Collective</a>
+        </div>
+
+        <footer class="animate d-4">
+            <div class="copyright">© 2026 EINHEIT COLLECTIVE. ALL RIGHTS RESERVED.</div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleMenu() { document.getElementById('dropdownMenu').classList.toggle('active'); }
+        window.onclick = function(event) { if (!event.target.closest('.hamburger-wrapper')) { const menu = document.getElementById('dropdownMenu'); if (menu && menu.classList.contains('active')) menu.classList.remove('active'); } }
+    </script>
+</body>
+</html>

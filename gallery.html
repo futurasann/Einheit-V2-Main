@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EINHEIT | Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #000; --surf: #0d0d0d; --bord: #222; --dim: #999; 
+            --max-w-desktop: 1100px; 
+            --accent: #00ff88;
+        }
+        
+        * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { 
+            background: var(--bg); color: white; font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; width: 100%; 
+        }
+
+        /* NAVBAR */
+        nav { 
+            display: flex; justify-content: center; align-items: center; 
+            position: fixed; width: 100%; top: 20px; left: 0; z-index: 9999; 
+            padding: 0 15px;
+        }
+        
+        .nav-container { 
+            width: 100%; max-width: var(--max-w-desktop); 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 25px; 
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--bord); border-radius: 100px;
+            height: 75px; min-height: 75px;
+        }
+
+        .nav-logo-img { height: 55px; width: auto; flex-shrink: 0; }
+
+        .desktop-menu { display: none; gap: 30px; }
+        .desktop-menu a { 
+            color: var(--dim); text-decoration: none; font-size: 11px; 
+            font-weight: 600; text-transform: uppercase; letter-spacing: 2px; 
+        }
+        .desktop-menu a:hover { color: white; }
+
+        .hamburger-wrapper { position: relative; display: flex; align-items: center; }
+        .hamburger { 
+            cursor: pointer; display: flex; flex-direction: column; gap: 5px; 
+            background: #1a1a1a; padding: 12px; border-radius: 50%; border: 1px solid #333;
+            width: 45px; height: 45px; justify-content: center; align-items: center;
+        }
+        .hamburger span { width: 18px; height: 2px; background: white; }
+
+        .dropdown-menu {
+            position: absolute; top: 70px; right: 0; width: 220px;
+            background: #0f0f0f; border: 1px solid var(--bord);
+            border-radius: 20px; padding: 15px; display: none;
+            flex-direction: column; gap: 5px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+        .dropdown-menu.active { display: flex; }
+        .dropdown-menu a { 
+            color: var(--dim); text-decoration: none; font-size: 13px; 
+            font-weight: 600; padding: 12px; border-radius: 12px; 
+        }
+        .dropdown-menu a:hover { background: #1a1a1a; color: white; }
+
+        /* CONTENT WRAPPER */
+        .wrapper { 
+            width: 100%; max-width: var(--max-w-desktop); 
+            margin: 0 auto; padding: 145px 20px 40px; 
+        }
+
+        /* HEADER SECTION */
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--bord);
+            padding-bottom: 20px;
+        }
+
+        h2 { font-size: clamp(32px, 5vw, 48px); font-weight: 800; letter-spacing: -2px; margin: 0; }
+        
+        .btn-add-product {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            color: black;
+            padding: 14px 24px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            white-space: nowrap;
+        }
+        .btn-add-product:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
+
+        /* GRID */
+        .g-grid { 
+            display: grid; grid-template-columns: repeat(2, 1fr); 
+            gap: 15px; text-align: left;
+        }
+
+        .g-card { 
+            background: var(--surf); border: 1px solid var(--bord); 
+            border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;
+        }
+        .img-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #111; }
+        .g-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease; }
+        .g-card:hover img { transform: scale(1.05); }
+
+        .g-info { padding: 20px; flex-grow: 1; }
+        .g-info h3 { font-size: 12px; margin: 0; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .g-info p { font-size: 10px; color: var(--dim); margin: 8px 0 0; font-family: 'JetBrains Mono'; }
+
+        /* SKELETON */
+        .skeleton {
+            background: linear-gradient(90deg, #0d0d0d 25%, #1a1a1a 50%, #0d0d0d 75%);
+            background-size: 200% 100%; animation: shimmer 1.5s infinite linear;
+        }
+        @keyframes shimmer { to { background-position: -200% 0; } }
+
+        footer { margin-top: 80px; padding: 60px 0; border-top: 1px solid var(--bord); text-align: center; }
+        .copyright { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 2px; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate { opacity: 0; animation: fadeUp 0.8s ease forwards; }
+
+        @media (max-width: 600px) {
+            .gallery-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+            .btn-add-product { width: 100%; justify-content: center; }
+            .g-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        }
+        @media (min-width: 992px) {
+            .desktop-menu { display: flex; }
+            .hamburger-wrapper { display: none; }
+            .g-grid { grid-template-columns: repeat(4, 1fr); } 
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html"><img src="https://files.catbox.moe/iru1fz.png" class="nav-logo-img"></a>
+            <div class="desktop-menu">
+                <a href="index.html">Home</a>
+                <a href="gallery.html" style="color: white;">Gallery</a>
+                <a href="rank.html">Rank</a>
+                <a href="news.html">News</a>
+                <a href="verify.html">Check ID Card</a>
+            </div>
+            <div class="hamburger-wrapper">
+                <div class="hamburger" onclick="toggleMenu()">
+                    <span></span><span></span>
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="index.html">Home</a>
+                    <a href="gallery.html">Gallery</a>
+                    <a href="rank.html">Rank</a>
+                    <a href="news.html">News</a>
+                    <a href="verify.html">Check ID Card</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <header class="gallery-header animate">
+            <h2>Einheit Gallery.</h2>
+            <a href="add-product.html" class="btn-add-product">
+                <span style="font-size: 18px; line-height: 0;">+</span> Add Your Product
+            </a>
+        </header>
+
+        <div id="galleryContainer" class="g-grid">
+            <div class="g-card sk-item">
+                <div class="img-box skeleton"></div>
+                <div class="g-info"><div style="height: 12px; width: 60%; background: #1a1a1a; border-radius: 4px;"></div></div>
+            </div>
+            <div class="g-card sk-item">
+                <div class="img-box skeleton"></div>
+                <div class="g-info"><div style="height: 12px; width: 60%; background: #1a1a1a; border-radius: 4px;"></div></div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="copyright animate">© 2026 EINHEIT COLLECTIVE. ALL RIGHTS RESERVED.</div>
+        </footer>
+    </div>
+
+    <script>
+        // API URL BARU
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwTRkyxhOiGqEL2hMzd4ncg9pgtcx3zqQalLKuRF2Cu_fzUGz3Duf7aV4qLh9eoYQvN/exec';
+
+        function toggleMenu() { document.getElementById('dropdownMenu').classList.toggle('active'); }
+
+        async function fetchGallery() {
+            const container = document.getElementById('galleryContainer');
+            
+            try {
+                // Fetch data dengan action getGallery
+                const response = await fetch(`${scriptURL}?action=getGallery&t=${new Date().getTime()}`);
+                const data = await response.json();
+
+                if (data && data.length > 0) {
+                    // Mapping data menggunakan format properti: item.name, item.serial, item.img
+                    container.innerHTML = data.map((item, i) => `
+                        <div class="g-card animate" style="animation-delay: ${i*0.05}s">
+                            <div class="img-box">
+                                <img src="${item.img}" loading="lazy" onerror="this.src='https://via.placeholder.com/400?text=No+Image'">
+                            </div>
+                            <div class="g-info">
+                                <h3>${item.name || 'Unnamed Unit'}</h3>
+                                <p>SERIAL: ${item.serial || 'N/A'}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #444; padding: 50px;'>No gear available in the gallery yet.</p>";
+                }
+            } catch (e) { 
+                console.error("Fetch Error:", e);
+                container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>FAILED_TO_CONNECT_DATABASE</p>";
+            }
+        }
+
+        // Jalankan Fetch
+        fetchGallery();
+
+        // Close dropdown menu if clicking outside
+        window.onclick = function(event) {
+            if (!event.target.closest('.hamburger-wrapper')) {
+                const menu = document.getElementById('dropdownMenu');
+                if (menu && menu.classList.contains('active')) menu.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
