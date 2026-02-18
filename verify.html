@@ -13,23 +13,23 @@
         * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; width: 100%; }
 
+        /* --- NAVBAR START --- */
         nav { display: flex; justify-content: center; align-items: center; position: fixed; width: 100%; top: 20px; z-index: 9999; padding: 0 15px; }
         .nav-container { 
             width: 100%; max-width: var(--max-w-desktop); display: flex; justify-content: space-between; align-items: center; 
-            padding: 0 25px; background: rgba(15,15,15,0.8); backdrop-filter: blur(20px); border: 1px solid var(--bord); border-radius: 100px; height: 75px; 
+            padding: 0 30px; background: rgba(15,15,15,0.8); backdrop-filter: blur(20px); border: 1px solid var(--bord); border-radius: 100px; height: 75px; 
         }
         .nav-logo-img { height: 55px; width: auto; object-fit: contain; }
 
-        /* --- DESKTOP NAVIGATION (Default Hidden) --- */
-        .desktop-nav { display: none; gap: 10px; }
+        /* Desktop Menu */
+        .desktop-nav { display: none; gap: 25px; align-items: center; }
         .desktop-nav a { 
-            color: var(--dim); text-decoration: none; font-size: 13px; font-weight: 600; 
-            padding: 10px 18px; border-radius: 100px; border: 1px solid transparent;
+            color: var(--dim); text-decoration: none; font-size: 11px; font-weight: 700; 
+            text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s;
         }
-        .desktop-nav a:hover { color: var(--accent); border-color: var(--bord); background: rgba(255,255,255,0.05); }
-        .desktop-nav a.active { color: white; border-color: var(--accent); }
+        .desktop-nav a:hover, .desktop-nav a.active { color: white; }
 
-        /* --- MOBILE HAMBURGER --- */
+        /* Mobile Hamburger */
         .hamburger-wrapper { position: relative; display: flex; align-items: center; }
         .hamburger { cursor: pointer; display: flex; flex-direction: column; gap: 5px; background: #1a1a1a; padding: 12px; border-radius: 50%; border: 1px solid #333; width: 45px; height: 45px; justify-content: center; align-items: center; }
         .hamburger span { width: 18px; height: 2px; background: white; }
@@ -38,17 +38,14 @@
         .dropdown-menu a { color: var(--dim); text-decoration: none; font-size: 13px; font-weight: 600; padding: 12px; border-radius: 12px; }
         .dropdown-menu a:hover { background: #1a1a1a; color: white; }
 
-        /* --- RESPONSIVE LOGIC --- */
-        @media (min-width: 800px) {
-            .hamburger-wrapper { display: none; } /* Sembunyiin hamburger di desktop */
-            .desktop-nav { display: flex; }      /* Tampilin barisan menu di desktop */
+        /* Responsive Navbar */
+        @media (min-width: 900px) {
+            .hamburger-wrapper { display: none; }
+            .desktop-nav { display: flex; }
         }
+        @media (max-width: 768px) { .nav-container { height: 70px; } }
+        /* --- NAVBAR END --- */
 
-        @media (max-width: 768px) { 
-            .nav-container { height: 70px; } 
-        }
-
-        /* Sisa CSS lu tetap sama... */
         .wrapper { width: 100%; max-width: 500px; margin: 0 auto; padding: 150px 20px 80px; }
         .card { background: var(--surf); border: 1px solid var(--bord); border-radius: 24px; padding: 30px 20px; margin-bottom: 20px; }
         h2 { font-weight: 800; font-size: 22px; text-align: center; margin:0; letter-spacing: 1px; }
@@ -82,7 +79,7 @@
                 <a href="gallery.html">Gallery</a>
                 <a href="rank.html">Rank</a>
                 <a href="news.html">News</a>
-                <a href="verify.html" class="active">Verify</a>
+                <a href="verify.html" class="active">Check ID Card</a>
             </div>
 
             <div class="hamburger-wrapper">
@@ -128,12 +125,7 @@
 
     <script>
         function toggleMenu() { document.getElementById('dropdownMenu').classList.toggle('active'); }
-        
-        window.onclick = function(e) { 
-            if (!e.target.closest('.hamburger-wrapper')) {
-                document.getElementById('dropdownMenu').classList.remove('active');
-            }
-        }
+        window.onclick = function(e) { if (!e.target.closest('.hamburger-wrapper')) document.getElementById('dropdownMenu').classList.remove('active'); }
 
         async function fetchMemberData() {
             const idInput = document.getElementById('memberID').value.trim();
@@ -182,9 +174,7 @@
                     `;
                     document.getElementById('input-card').style.display = 'none';
                     document.getElementById('result-section').classList.add('active-result');
-                } else {
-                    throw new Error("Not Found");
-                }
+                } else { throw new Error(); }
             } catch (e) {
                 loading.style.display = 'none';
                 btn.style.display = 'block';
