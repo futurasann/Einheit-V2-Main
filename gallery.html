@@ -28,21 +28,21 @@
         .nav-container { 
             width: 100%; max-width: var(--max-w-desktop); 
             display: flex; justify-content: space-between; align-items: center; 
-            padding: 0 25px; 
+            padding: 0 35px; 
             background: rgba(15, 15, 15, 0.8);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--bord); border-radius: 100px;
-            height: 75px; min-height: 75px;
+            height: 75px;
         }
 
-        .nav-logo-img { height: 55px; width: auto; flex-shrink: 0; }
+        .nav-logo-img { height: 45px; width: auto; flex-shrink: 0; }
 
         .desktop-menu { display: none; gap: 30px; }
         .desktop-menu a { 
             color: var(--dim); text-decoration: none; font-size: 11px; 
-            font-weight: 600; text-transform: uppercase; letter-spacing: 2px; 
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; 
         }
-        .desktop-menu a:hover { color: white; }
+        .desktop-menu a:hover, .desktop-menu a.active { color: white; }
 
         .hamburger-wrapper { position: relative; display: flex; align-items: center; }
         .hamburger { 
@@ -65,40 +65,26 @@
         }
         .dropdown-menu a:hover { background: #1a1a1a; color: white; }
 
-        /* CONTENT WRAPPER */
+        /* CONTENT */
         .wrapper { 
             width: 100%; max-width: var(--max-w-desktop); 
             margin: 0 auto; padding: 145px 20px 40px; 
         }
 
-        /* HEADER SECTION */
         .gallery-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 50px;
-            border-bottom: 1px solid var(--bord);
-            padding-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: flex-end;
+            margin-bottom: 50px; border-bottom: 1px solid var(--bord); padding-bottom: 20px;
         }
 
         h2 { font-size: clamp(32px, 5vw, 48px); font-weight: 800; letter-spacing: -2px; margin: 0; }
         
         .btn-add-product {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: white;
-            color: black;
-            padding: 14px 24px;
-            border-radius: 100px;
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            white-space: nowrap;
+            display: inline-flex; align-items: center; gap: 10px;
+            background: white; color: black; padding: 14px 24px;
+            border-radius: 100px; text-decoration: none;
+            font-size: 11px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 1.5px; white-space: nowrap;
         }
-        .btn-add-product:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
 
         /* GRID */
         .g-grid { 
@@ -110,8 +96,8 @@
             background: var(--surf); border: 1px solid var(--bord); 
             border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;
         }
-        .img-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #111; }
-        .g-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease; }
+        .img-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #111; position: relative; }
+        .g-card img { width: 100%; height: 100%; object-fit: cover; }
         .g-card:hover img { transform: scale(1.05); }
 
         .g-info { padding: 20px; flex-grow: 1; }
@@ -150,15 +136,13 @@
             <a href="index.html"><img src="https://files.catbox.moe/iru1fz.png" class="nav-logo-img"></a>
             <div class="desktop-menu">
                 <a href="index.html">Home</a>
-                <a href="gallery.html" style="color: white;">Gallery</a>
+                <a href="gallery.html" class="active">Gallery</a>
                 <a href="rank.html">Rank</a>
                 <a href="news.html">News</a>
-                <a href="verify.html">Check ID Card</a>
+                <a href="verify.html">Verify</a>
             </div>
             <div class="hamburger-wrapper">
-                <div class="hamburger" onclick="toggleMenu()">
-                    <span></span><span></span>
-                </div>
+                <div class="hamburger" onclick="toggleMenu()"><span></span><span></span></div>
                 <div class="dropdown-menu" id="dropdownMenu">
                     <a href="index.html">Home</a>
                     <a href="gallery.html">Gallery</a>
@@ -173,71 +157,76 @@
     <div class="wrapper">
         <header class="gallery-header animate">
             <h2>Einheit Gallery.</h2>
-            <a href="add-product.html" class="btn-add-product">
-                <span style="font-size: 18px; line-height: 0;">+</span> Add Your Product
-            </a>
+            <a href="add-product.html" class="btn-add-product">+ Add Product</a>
         </header>
 
         <div id="galleryContainer" class="g-grid">
-            <div class="g-card sk-item">
-                <div class="img-box skeleton"></div>
-                <div class="g-info"><div style="height: 12px; width: 60%; background: #1a1a1a; border-radius: 4px;"></div></div>
-            </div>
-            <div class="g-card sk-item">
-                <div class="img-box skeleton"></div>
-                <div class="g-info"><div style="height: 12px; width: 60%; background: #1a1a1a; border-radius: 4px;"></div></div>
-            </div>
+            <div class="g-card sk-item"><div class="img-box skeleton"></div><div class="g-info"><div class="skeleton" style="height:12px; width:60%"></div></div></div>
+            <div class="g-card sk-item"><div class="img-box skeleton"></div><div class="g-info"><div class="skeleton" style="height:12px; width:60%"></div></div></div>
         </div>
 
         <footer>
-            <div class="copyright animate">© 2026 EINHEIT COLLECTIVE. ALL RIGHTS RESERVED.</div>
+            <div class="copyright">© 2026 EINHEIT COLLECTIVE. ALL RIGHTS RESERVED.</div>
         </footer>
     </div>
 
     <script>
-        // API URL BARU
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwTRkyxhOiGqEL2hMzd4ncg9pgtcx3zqQalLKuRF2Cu_fzUGz3Duf7aV4qLh9eoYQvN/exec';
+        const CACHE_KEY = 'einheit_gallery_cache';
 
         function toggleMenu() { document.getElementById('dropdownMenu').classList.toggle('active'); }
 
-        async function fetchGallery() {
+        // Fungsi Render Data
+        function renderGallery(data) {
             const container = document.getElementById('galleryContainer');
-            
+            if (!data || data.length === 0) {
+                container.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #444; padding: 50px;'>No gear available.</p>";
+                return;
+            }
+            container.innerHTML = data.map((item, i) => `
+                <div class="g-card animate" style="animation-delay: ${i*0.05}s">
+                    <div class="img-box">
+                        <img src="${item.img}" loading="lazy" onerror="this.src='https://files.catbox.moe/cmhaot.jpg'">
+                    </div>
+                    <div class="g-info">
+                        <h3>${item.name || 'Unknown Item'}</h3>
+                        <p>${item.brand || 'No Brand'}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function fetchGallery() {
+            // 1. Cek Cache dulu biar cepet
+            const cachedData = localStorage.getItem(CACHE_KEY);
+            if (cachedData) {
+                renderGallery(JSON.parse(cachedData));
+            }
+
             try {
-                // Fetch data dengan action getGallery
-                const response = await fetch(`${scriptURL}?action=getGallery&t=${new Date().getTime()}`);
+                // 2. Ambil data terbaru dari server
+                const response = await fetch(`${scriptURL}?action=getGallery`);
                 const data = await response.json();
 
                 if (data && data.length > 0) {
-                    // Mapping data menggunakan format properti: item.name, item.serial, item.img
-                    container.innerHTML = data.map((item, i) => `
-                        <div class="g-card animate" style="animation-delay: ${i*0.05}s">
-                            <div class="img-box">
-                                <img src="${item.img}" loading="lazy" onerror="this.src='https://via.placeholder.com/400?text=No+Image'">
-                            </div>
-                            <div class="g-info">
-                                <h3>${item.name || 'Unnamed Unit'}</h3>
-                                <p>SERIAL: ${item.serial || 'N/A'}</p>
-                            </div>
-                        </div>
-                    `).join('');
-                } else {
-                    container.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: #444; padding: 50px;'>No gear available in the gallery yet.</p>";
+                    // 3. Simpan ke Cache
+                    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+                    // 4. Update Tampilan
+                    renderGallery(data);
                 }
-            } catch (e) { 
+            } catch (e) {
                 console.error("Fetch Error:", e);
-                container.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>FAILED_TO_CONNECT_DATABASE</p>";
+                if (!cachedData) {
+                    document.getElementById('galleryContainer').innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>OFFLINE_OR_DATABASE_ERROR</p>";
+                }
             }
         }
 
-        // Jalankan Fetch
         fetchGallery();
 
-        // Close dropdown menu if clicking outside
-        window.onclick = function(event) {
-            if (!event.target.closest('.hamburger-wrapper')) {
-                const menu = document.getElementById('dropdownMenu');
-                if (menu && menu.classList.contains('active')) menu.classList.remove('active');
+        window.onclick = function(e) {
+            if (!e.target.closest('.hamburger-wrapper')) {
+                document.getElementById('dropdownMenu').classList.remove('active');
             }
         }
     </script>
