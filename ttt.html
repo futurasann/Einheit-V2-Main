@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>CRITICAL_SYSTEM_FAILURE</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            overflow: hidden; /* Biar gak bisa di-scroll */
+            height: 100vh;
+        }
+
+        /* Background Hujan Kode */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* Kontainer Pesan Utama */
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+            animation: blink 0.2s infinite;
+        }
+
+        .status-box {
+            border: 2px solid #00FF00;
+            padding: 20px;
+            display: inline-block;
+            background: rgba(0, 20, 0, 0.8);
+            box-shadow: 0 0 20px #00FF00;
+        }
+
+        .loading-bar {
+            width: 300px;
+            height: 20px;
+            border: 1px solid #00FF00;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: #00FF00;
+            animation: load 4s forwards steps(10);
+        }
+
+        /* Animasi Glitch & Error */
+        @keyframes blink {
+            0% { opacity: 1; transform: skew(0deg); }
+            50% { opacity: 0.5; transform: skew(10deg); }
+            100% { opacity: 1; transform: skew(-10deg); }
+        }
+
+        @keyframes load {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .error-msg {
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        /* Overlay Merah sesekali */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 0, 0, 0.1);
+            pointer-events: none;
+            animation: flash 3s infinite;
+        }
+
+        @keyframes flash {
+            0%, 90% { opacity: 0; }
+            95% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix"></canvas>
+
+    <div class="overlay"></div>
+
+    <div class="container">
+        <h1 id="main-title">SYSTEM COMPROMISED</h1>
+        <div class="status-box">
+            <p>> ACCESSING ENCRYPTED FILES...</p>
+            <p id="log">> BYPASSING FIREWALL: <span style="color: yellow;">SUCCESS</span></p>
+            <div class="loading-bar">
+                <div class="progress"></div>
+            </div>
+            <p class="error-msg" id="dynamic-text">DOWNLOADING DATABASE...</p>
+        </div>
+    </div>
+
+    <script>
+        // Matrix Rain Effect
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle
